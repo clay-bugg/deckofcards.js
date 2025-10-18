@@ -1,0 +1,25 @@
+# Node modules
+node_modules/
+.pnpm-store/
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+build/
+
+# Test coverage
+coverage/
+
+# Local environment files
+.env
+
+# VS Code settings
+.vscode/
+*.code-workspace
+
+# OS-specific files
+.DS_Store
+Thumbs.db
