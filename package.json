@@ -1,0 +1,22 @@
+{
+	"name": "deck_of_cards",
+	"version": "1.0.0",
+	"description": "",
+	"main": "./src/index.js",
+	"type": "module",
+	"scripts": {
+		"test": "vitest"
+	},
+	"keywords": [
+		"cards",
+		"deck",
+		"poker",
+		"blackjack",
+		"game",
+		"javascript",
+		"library"
+	],
+  
+	"author": "Kaleb Butler",
+	"license": "MIT"
+}
