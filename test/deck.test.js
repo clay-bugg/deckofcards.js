@@ -2,19 +2,17 @@ import { describe, it, expect } from 'vitest'
 import { Deck } from '../src/index.js'
 
 describe('Deck', () => {
-	it('should contain 52 cards after reset', () => {
+	it(' includeJokers should optionally include 2 jokers', () => {
+		const deck = new Deck({ includeJokers: true })
+		const jokers = deck.cards.filter((c) => c.suit === 'Joker')
+		expect(jokers.length).toBe(2)
+		expect(deck.cards.length).toBe(54)
+	})
+	it('reset() should contain 52 cards', () => {
 		const deck = new Deck()
 		expect(deck.cards.length).toBe(52)
 	})
-
-	it('should draw a card and reduce deck size', () => {
-		const deck = new Deck()
-		const card = deck.draw()
-		expect(card).toBeDefined()
-		expect(deck.cards.length).toBe(51)
-	})
-
-	it('should shuffle cards without changing total count', () => {
+	it('shuffle() should shuffle cards without changing total count', () => {
 		const deck = new Deck()
 		const before = deck.cards.map((c) => c.toString())
 		deck.shuffle()
@@ -23,14 +21,13 @@ describe('Deck', () => {
 		expect(after).not.toEqual(before) // occasionally may fail if shuffle returns same order by chance
 	})
 
-	it('should optionally include 2 jokers', () => {
-		const deck = new Deck({ includeJokers: true })
-		const jokers = deck.cards.filter((c) => c.suit === 'Joker')
-		expect(jokers.length).toBe(2)
-		expect(deck.cards.length).toBe(54)
+	it('draw() should draw a card and reduce deck size', () => {
+		const deck = new Deck()
+		const card = deck.draw()
+		expect(card).toBeDefined()
+		expect(deck.cards.length).toBe(51)
 	})
-
-	it('should reveal top card of deck without changing deck size', () => {
+	it('peek() should reveal top card of deck without changing deck size', () => {
 		const deck = new Deck() // 52 cards
 		const initialLength = deck.cards.length
 
@@ -58,5 +55,15 @@ describe('Deck', () => {
 			expect(drawnCard).toBe(topCard)
 		}
 	})
-	
+	it('findCard() should return the correct card or null', () => {
+		const deck = new Deck()
+		expect(deck.findCard('Ace', 'Spades')).toEqual({
+			rank: 'Ace',
+			suit: 'Spades',
+		})
+	})
+	it('hasCard() should correctly detect cards', () => {
+		expect(deck.hasCard('10', 'Hearts')).toBe(true)
+		expect(deck.hasCard('2', 'Clubs')).toBe(false)
+	})
 })

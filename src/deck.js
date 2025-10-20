@@ -49,6 +49,18 @@ class Deck {
 	peek() {
 		return this.cards[this.cards.length - 1]
 	}
+	findCard(rank, suit) {
+		return (
+			this.cards.find(
+				(card) => card.rank === rank && card.suit === suit
+			) || null
+		)
+	}
+	hasCard(value, suit) {
+		return this.cards.some(
+			(card) => card.value === value && card.suit === suit
+		)
+	}
 }
 
 export default Deck
