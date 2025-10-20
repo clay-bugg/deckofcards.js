@@ -23,6 +23,7 @@ class Deck {
 		this.cards = []
 		this.reset()
 	}
+
 	reset() {
 		this.cards = []
 		for (let n = 0; n < this.deckCount; n++) {
@@ -37,28 +38,39 @@ class Deck {
 			}
 		}
 	}
+
 	shuffle() {
 		for (let i = this.cards.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1))
 			;[this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]]
 		}
 	}
+
+	cut() {
+		if (this.cards.length <= 1) return
+
+		const min = Math.floor(this.cards.length * 0.3)
+		const max = Math.ceil(this.cards.length * 0.7)
+		const cutIndex = Math.floor(Math.random() * (max - min + 1)) + min
+
+		const top = this.cards.slice(0, cutIndex)
+		const bottom = this.cards.slice(cutIndex)
+		this.cards = bottom.concat(top)
+	}
+
 	draw() {
 		return this.cards.pop()
 	}
+
 	peek() {
 		return this.cards[this.cards.length - 1]
 	}
+
 	findCard(rank, suit) {
 		return (
 			this.cards.find(
 				(card) => card.rank === rank && card.suit === suit
 			) || null
-		)
-	}
-	hasCard(value, suit) {
-		return this.cards.some(
-			(card) => card.value === value && card.suit === suit
 		)
 	}
 }
