@@ -1,5 +1,36 @@
 import { describe, it, expect } from 'vitest'
-import { Deck } from '../src/index.js'
+import { Deck, DECK_PRESETS, Card } from '../src/index.js'
+
+describe('Card class', () => {
+	it('should correctly store suit, rank, and value', () => {
+		const ace = new Card('Hearts', 'Ace')
+		expect(ace.suit).toBe('Hearts')
+		expect(ace.rank).toBe('Ace')
+		expect(ace.value).toEqual([1, 11])
+
+		const king = new Card('Spades', 'King')
+		expect(king.value).toBe(10)
+
+		const five = new Card('Diamonds', '5')
+		expect(five.value).toBe(5)
+	})
+
+	it('toString() should return a readable string', () => {
+		const card = new Card('Spades', 'King')
+		expect(card.toString()).toBe('King of Spades')
+	})
+
+	it('two different cards should be distinct', () => {
+		const card1 = new Card('Clubs', '2')
+		const card2 = new Card('Clubs', '3')
+		expect(card1.toString()).not.toBe(card2.toString())
+	})
+
+	it('Joker cards should have value 0', () => {
+		const joker = new Card('Joker', 'Red')
+		expect(joker.value).toBe(0)
+	})
+})
 
 describe('Deck', () => {
 	it(' includeJokers should optionally include 2 jokers', () => {
@@ -96,4 +127,52 @@ describe('Deck', () => {
 		expect(card.suit).toBe('Spades')
 	})
 
+})
+
+describe('Deck presets', () => {
+	it('creates a standard deck with 52 cards', () => {
+		const deck = new Deck({ preset: 'standard' })
+		expect(deck.cards.length).toBe(52)
+	})
+
+	it('creates a blackjack deck with 6 decks (312 cards)', () => {
+		const deck = new Deck({ preset: 'blackjack' })
+		expect(deck.cards.length).toBe(52 * 6)
+	})
+
+	it('creates a poker deck identical to standard', () => {
+		const poker = new Deck({ preset: 'poker' })
+		const standard = new Deck({ preset: 'standard' })
+		expect(poker.cards.length).toBe(standard.cards.length)
+		expect(poker.includeJokers).toBe(standard.includeJokers)
+	})
+
+	it('creates a euchre deck with 24 cards (9–Ace only)', () => {
+		const deck = new Deck({ preset: 'euchre' })
+		expect(deck.cards.length).toBe(24)
+		expect(deck.ranks).toEqual(['9', '10', 'Jack', 'Queen', 'King', 'Ace'])
+	})
+
+	it('creates a joker deck with 54 cards (includes jokers)', () => {
+		const deck = new Deck({ preset: 'doublejoker' })
+		expect(deck.cards.length).toBe(54)
+		const jokers = deck.cards.filter((c) => c.suit === 'Joker')
+		expect(jokers.length).toBe(2)
+	})
+
+	it('allows overriding jokers and deck count in presets', () => {
+		const deck = new Deck({
+			preset: 'poker',
+			includeJokers: true,
+			deckCount: 2,
+		})
+		expect(deck.cards.length).toBe(52 * 2 + 2 * 2) // 2 decks, 4 jokers total
+		const jokers = deck.cards.filter((c) => c.suit === 'Joker')
+		expect(jokers.length).toBe(4)
+	})
+
+	it('defaults to standard if preset is unknown', () => {
+		const deck = new Deck({ preset: 'unknownGame' })
+		expect(deck.cards.length).toBe(52)
+	})
 })

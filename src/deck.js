@@ -1,25 +1,47 @@
 import Card from './card.js'
 
+const DECK_PRESETS = {
+	standard: {
+		deckCount: 1,
+		includeJokers: false,
+		description: 'Standard 52-card deck',
+	},
+	poker: {
+		deckCount: 1,
+		includeJokers: false,
+		description: 'Standard deck used in most poker games',
+	},
+	blackjack: {
+		deckCount: 6,
+		includeJokers: false,
+		description: 'Typical casino blackjack shoe with 6 decks',
+	},
+	euchre: {
+		deckCount: 1,
+		includeJokers: false,
+		ranks: ['9', '10', 'Jack', 'Queen', 'King', 'Ace'],
+		description: 'Euchre deck with 24 cards',
+	},
+	doublejoker: {
+		deckCount: 1,
+		includeJokers: true,
+		description: '52 cards plus 2 jokers',
+	},
+}
 class Deck {
-	constructor({ includeJokers = false, deckCount = 1 } = {}) {
+	constructor({ preset = 'standard', includeJokers, deckCount } = {}) {
+		const config = DECK_PRESETS[preset] || DECK_PRESETS.standard
+		
+		this.includeJokers =
+			includeJokers !== undefined ? includeJokers : config.includeJokers
+		this.deckCount =
+			deckCount !== undefined ? deckCount : config.deckCount
+
 		this.suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
-		this.ranks = [
-			'Ace',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9',
-			'10',
-			'Jack',
-			'Queen',
-			'King',
-		]
-		this.includeJokers = includeJokers
-		this.deckCount = deckCount
+		this.ranks =
+			config.ranks ||
+			['Ace', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'Jack', 'Queen', 'King']
+
 		this.cards = []
 		this.reset()
 	}
@@ -38,7 +60,6 @@ class Deck {
 			}
 		}
 	}
-
 	shuffle() {
 		for (let i = this.cards.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1))
@@ -76,3 +97,4 @@ class Deck {
 }
 
 export default Deck
+export { DECK_PRESETS }
