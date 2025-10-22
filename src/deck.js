@@ -157,7 +157,7 @@ class Deck {
 		this.includeJokers =
 			includeJokers !== undefined ? includeJokers : config.includeJokers
 		this.deckCount = deckCount !== undefined ? deckCount : config.deckCount
-		this.suits = ['Hearts', 'Diamonds', 'Clubs', 'Spades']
+		this.suits = ['♥', '♦', '♣', '♠']
 		this.ranks = config.ranks || Object.keys(config.values)
 		this.values = config.values
 		this.singleJokerPreset = preset === 'doublejoker'
